@@ -317,12 +317,10 @@ function highlightTerms(htmlText) {
     `<mark class="term" data-term="${escAttr(m)}" title="${escAttr(defOf(m))}">${m}</mark>`);
 }
 
-function analyzePassage() {
-  const raw = $("#passageInput").value.trim();
-  if (!raw) { alert("请先粘贴一段文字再点「开始精读」。"); return; }
-
+function renderPassage(raw, isOriginal) {
   const sentences = splitSentences(raw);
   const view = $("#passageView");
+  view.classList.toggle("orig-mode", !!isOriginal);
   view.innerHTML = sentences.map((s, i) =>
     `<span class="sentence" data-i="${i}">${highlightTerms(escHtml(s))}</span>`).join(" ");
 
@@ -350,6 +348,57 @@ function analyzePassage() {
     addVocab(m.dataset.term, m.title);
   }));
   view.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function analyzePassage() {
+  const raw = $("#passageInput").value.trim();
+  if (!raw) { alert("请先粘贴一段文字再点「开始精读」。"); return; }
+  renderPassage(raw, false);
+}
+
+/* ---------- 原文阅读 ---------- */
+function renderOrigControls() {
+  const partSel = $("#origPart");
+  const bookSel = $("#origBook");
+  if (!partSel || !bookSel) return;
+  partSel.innerHTML = "";
+  const withText = getBook().parts.filter(p => p.texts);
+  if (!withText.length) {
+    partSel.innerHTML = '<option value="">（当前书无内置原文）</option>';
+    bookSel.innerHTML = "";
+    return;
+  }
+  withText.forEach(p => {
+    const opt = document.createElement("option");
+    opt.value = p.id;
+    opt.textContent = p.name;
+    partSel.appendChild(opt);
+  });
+  if ([...partSel.options].some(o => o.value === currentPart)) partSel.value = currentPart;
+  renderOrigBookSel();
+}
+function renderOrigBookSel() {
+  const partSel = $("#origPart"), bookSel = $("#origBook");
+  if (!partSel || !bookSel) return;
+  const part = getBook().parts.find(p => p.id === partSel.value) || getBook().parts.find(p => p.texts);
+  bookSel.innerHTML = "";
+  if (!part || !part.texts) return;
+  const unit = part.unit || (part.books.length > 8 ? "卷" : "章");
+  part.books.forEach(b => {
+    const opt = document.createElement("option");
+    opt.value = b.n;
+    opt.textContent = `第 ${b.n} ${unit} · ${b.title}`;
+    bookSel.appendChild(opt);
+  });
+  if ([...bookSel.options].some(o => +o.value === currentBook)) bookSel.value = currentBook;
+}
+function loadOriginal() {
+  const part = getBook().parts.find(p => p.id === $("#origPart").value);
+  const n = +$("#origBook").value;
+  if (!part || !part.texts) { toast("当前书没有内置原文"); return; }
+  const text = part.texts[n - 1];
+  if (!text) { toast("未找到该卷原文"); return; }
+  renderPassage(text, true);
 }
 
 /* ---------- 朗读 ---------- */
@@ -641,6 +690,7 @@ function switchBook(idx) {
   renderPartSelect();
   renderBookList();
   renderBookDetail();
+  renderOrigControls();
   renderVocab();
   renderGlossary("");
   renderProgress();
@@ -677,6 +727,16 @@ function bindEvents() {
 
   // 精读
   $("#btnAnalyze").addEventListener("click", analyzePassage);
+  $("#origPart").addEventListener("change", renderOrigBookSel);
+  $("#btnLoadOrig").addEventListener("click", loadOriginal);
+  $("#txtFile").addEventListener("change", e => {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => renderPassage(String(reader.result || ""), false);
+    reader.readAsText(file, "utf-8");
+    e.target.value = "";
+  });
   $("#btnClear").addEventListener("click", () => { $("#passageInput").value = ""; $("#passageView").innerHTML = ""; $("#pointsBox").hidden = true; $("#readerControls").hidden = true; stopSpeech(); });
   $("#btnReadAll").addEventListener("click", readAll);
   $("#btnStop").addEventListener("click", stopSpeech);
@@ -743,6 +803,7 @@ function init() {
   renderPartSelect();
   renderBookList();
   renderBookDetail();
+  renderOrigControls();
   renderGlossary("");
   renderProgress();
 }
