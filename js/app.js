@@ -126,7 +126,7 @@ function renderBookSelect() {
   LIBRARY.forEach((b, i) => {
     const opt = document.createElement("option");
     opt.value = i;
-    opt.textContent = `${b.icon} ${b.title}${b.subtitle ? " · " + b.subtitle : ""}`;
+    opt.textContent = `${b.title}${b.subtitle ? " · " + b.subtitle : ""}`;
     sel.appendChild(opt);
   });
   sel.value = currentBookIdx;
@@ -168,7 +168,7 @@ function renderBookList() {
 
 function bookStatusTag(partId, n) {
   return isDone(partId, n)
-    ? '<span class="tag" style="background:#1e7d32;color:#fff;">已读完 ✓</span>'
+    ? '<span class="tag done-tag">已读完 ✓</span>'
     : '<span class="tag">未读完</span>';
 }
 
@@ -182,7 +182,7 @@ function renderBookDetail() {
 
   const tags = arr => (arr || []).map(t => `<span class="tag">${escHtml(t)}</span>`).join("");
   const focusHtml = (b.focus || []).map(f =>
-    `<div class="focus-item"><span class="where">📍 ${escHtml(f.where)}</span><br>${escHtml(f.why)}</div>`).join("");
+    `<div class="focus-item"><span class="where">${escHtml(f.where)}</span><br>${escHtml(f.why)}</div>`).join("");
 
   const quizHtml = (b.quiz || []).map((q, qi) => `
     <div class="quiz-item" data-quiz="${qi}">
@@ -195,34 +195,34 @@ function renderBookDetail() {
   wrap.innerHTML = `
     <h2 class="book-title">第 ${b.n} ${unit} · ${escHtml(b.title)}</h2>
     <p class="book-sub">${escHtml(book.title)} · ${escHtml(part.name)} · ${bookStatusTag(part.id, b.n)}
-      <button id="btnMarkBook" class="btn small">${done ? "↩️ 取消读完" : "✅ 标记读完"}</button>
+      <button id="btnMarkBook" class="btn small">${done ? "取消读完" : "标记读完"}</button>
     </p>
     <div class="card detail-block">
-      <h3>📖 这${unit}讲什么（导读）</h3>
+      <h3>这${unit}讲什么（导读）</h3>
       <p>${escHtml(b.preview)}</p>
     </div>
     <div class="card detail-block">
-      <h3>👤 新出场人物</h3>
+      <h3>新出场人物</h3>
       <p>${(b.characters && b.characters.length) ? tags(b.characters) : "（无）"}</p>
     </div>
     <div class="card detail-block">
-      <h3>🗺 新地名</h3>
+      <h3>新地名</h3>
       <p>${(b.places && b.places.length) ? tags(b.places) : "（无）"}</p>
     </div>
     <div class="card detail-block">
-      <h3>🔑 关键概念</h3>
+      <h3>关键概念</h3>
       <p>${tags(b.terms)}</p>
     </div>
     <div class="card detail-block">
-      <h3>🎯 建议精读（先读这里，再回书里找）</h3>
+      <h3>建议精读（先读这里，再回书里找）</h3>
       ${focusHtml || "<p>（暂无）</p>"}
     </div>
     <div class="card detail-block">
-      <h3>📌 读完回顾（小结）</h3>
+      <h3>读完回顾（小结）</h3>
       <p>${escHtml(b.recap)}</p>
     </div>
     <div class="card detail-block">
-      <h3>✏️ 自测一下（检验是否读懂）</h3>
+      <h3>自测一下（检验是否读懂）</h3>
       ${quizHtml}
     </div>
     <div class="nav-book">
@@ -256,7 +256,7 @@ function renderBookDetail() {
       });
       const ex = $(".explain", item);
       ex.hidden = false;
-      ex.textContent = "💬 " + q.explain;
+      ex.textContent = q.explain;
     }));
   });
 }
@@ -332,7 +332,7 @@ function analyzePassage() {
     .sort((a, b) => b.score - a.score);
   const top = scored.slice(0, 5);
   const box = $("#pointsBox");
-  box.innerHTML = "<h3>💡 要点提示</h3><ul>" +
+  box.innerHTML = "<h3>要点提示</h3><ul>" +
     top.map(t => `<li>${escHtml(truncate(t.s, 62))}</li>`).join("") + "</ul>";
   box.hidden = false;
 
@@ -403,10 +403,10 @@ function removeVocab(name) {
 function renderVocab() {
   const box = $("#vocabBox");
   if (!box) return;
-  let html = `<h3>📇 生词本（${vocab.length}）</h3>
+  let html = `<h3>生词本（${vocab.length}）</h3>
     <p class="hint">Anki 导入：文件 → 导入，选择导出的 .txt（第 1 列=正面，第 2 列=背面，用 Tab 分隔）。</p>`;
   html += `<div class="vocab-actions">
-    <button id="btnExportAnki" class="btn primary">⬇️ 导出 Anki (.txt)</button>
+    <button id="btnExportAnki" class="btn primary">导出 Anki (.txt)</button>
     <button id="btnClearVocab" class="btn danger">清空生词本</button>
   </div>`;
   if (!vocab.length) {
@@ -555,18 +555,18 @@ function renderReviews() {
   const due = reviews.filter(r => !r.done && r.due <= today);
   const upcoming = reviews.filter(r => !r.done && r.due > today)
     .sort((a, b) => a.due.localeCompare(b.due)).slice(0, 6);
-  let html = `<h3>📅 复习提醒</h3>
+  let html = `<h3>复习提醒</h3>
     <p class="hint">读完一章/卷后，第 3 天、第 7 天回来花 5 分钟看小结、做自测题，记忆更牢。</p>`;
   if (!reviews.length) {
     html += `<p class="hint">（还没有复习任务——把某章标记为「读完」后会自动生成）</p>`;
   } else {
-    html += `<div class="review-group"><h4>✅ 今天待复习（${due.length}）</h4>`;
+    html += `<div class="review-group"><h4>今天待复习（${due.length}）</h4>`;
     html += due.length
       ? due.map(r => `<div class="review-item"><span class="review-label">${escHtml(r.label)} · ${escHtml(r.step)}</span><button class="btn small primary" data-review="${escAttr(r.id)}">完成复习</button></div>`).join("")
-      : `<p class="hint">今天没有到期任务 👍</p>`;
+      : `<p class="hint">今天没有到期任务</p>`;
     html += `</div>`;
     if (upcoming.length) {
-      html += `<div class="review-group"><h4>⏳ 即将到期</h4>` + upcoming.map(r =>
+      html += `<div class="review-group"><h4>即将到期</h4>` + upcoming.map(r =>
         `<div class="review-item upcoming"><span class="review-label">${escHtml(r.label)} · ${escHtml(r.step)}</span><span class="review-due">${r.due}</span></div>`).join("") + `</div>`;
     }
   }
@@ -577,7 +577,7 @@ function renderReviews() {
 
 function renderProgress() {
   const streak = calcStreak();
-  $("#streakBadge").textContent = "🔥 连续 " + streak + " 天";
+  $("#streakBadge").textContent = "连续 " + streak + " 天";
 
   $("#goalStatus").textContent =
     `今日目标：${goalMin} 分钟 · 本月已读 ${readDates.length} 天 · 连续 ${streak} 天`;
@@ -720,8 +720,23 @@ function bindEvents() {
   });
 }
 
+/* 删书后自动清理该书的进度与复习任务（书不在书库里的数据直接移除） */
+function cleanupMissingBooks() {
+  const ids = new Set(LIBRARY.map(b => b.id));
+  let changed = false;
+  Object.keys(progress).forEach(k => {
+    const bookId = k.split("/")[0];
+    if (!ids.has(bookId)) { delete progress[k]; changed = true; }
+  });
+  const oldLen = reviews.length;
+  reviews = reviews.filter(r => ids.has(r.id.split("/")[0]));
+  if (changed) store.set("progress", progress);
+  if (reviews.length !== oldLen) store.set("reviews", reviews);
+}
+
 function init() {
   migrateProgress();
+  cleanupMissingBooks();
   applySettings();
   bindEvents();
   renderBookSelect();
