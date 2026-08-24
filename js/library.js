@@ -18,7 +18,8 @@ const LIBRARY = [
         en: "Iliad",
         unit: "卷",
         intro: HOMER.epics.iliad.intro,
-        books: HOMER.epics.iliad.books
+        books: HOMER.epics.iliad.books,
+        texts: window.TEXT_ILIAD
       },
       {
         id: "odyssey",
@@ -26,7 +27,8 @@ const LIBRARY = [
         en: "Odyssey",
         unit: "卷",
         intro: HOMER.epics.odyssey.intro,
-        books: HOMER.epics.odyssey.books
+        books: HOMER.epics.odyssey.books,
+        texts: window.TEXT_ODYSSEY
       }
     ],
     glossary: HOMER.glossary,
