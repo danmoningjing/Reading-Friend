@@ -588,3 +588,12 @@ body.theme-dark .review-group h4 { color: var(--accent); }
     scroll-behavior: auto !important;
   }
 }
+/* ---------- 原文阅读 ---------- */
+.orig-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin: 10px 0; }
+.orig-row select {
+  padding: 9px 12px; font-size: .95rem;
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  background: var(--surface); color: var(--text);
+}
+.orig-import { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
+.passage-view.orig-mode { max-height: 74vh; overflow-y: auto; }
