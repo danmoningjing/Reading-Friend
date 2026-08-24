@@ -3,25 +3,26 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f6f6f4">
 <title>无障碍阅读伴侣</title>
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/style.css?v=2">
 </head>
 <body class="theme-light">
 
 <header class="app-header">
   <div class="brand">
-    <h1>📚 无障碍阅读伴侣</h1>
+    <h1>无障碍阅读伴侣</h1>
     <p class="subtitle">读得懂 · 读得进 · 读得下去</p>
   </div>
   <div class="streak-badge" id="streakBadge" title="连续阅读天数">🔥 0 天</div>
 </header>
 
 <nav class="tabs">
-  <button class="tab-btn active" data-tab="guide">📖 导读</button>
-  <button class="tab-btn" data-tab="reader">🔍 精读台</button>
-  <button class="tab-btn" data-tab="glossary">📚 词典</button>
-  <button class="tab-btn" data-tab="progress">🏆 进度</button>
-  <button class="tab-btn" data-tab="settings">⚙️ 设置</button>
+  <button class="tab-btn active" data-tab="guide">导读</button>
+  <button class="tab-btn" data-tab="reader">精读台</button>
+  <button class="tab-btn" data-tab="glossary">词典</button>
+  <button class="tab-btn" data-tab="progress">进度</button>
+  <button class="tab-btn" data-tab="settings">设置</button>
 </nav>
 
 <main>
@@ -49,7 +50,7 @@
       <textarea id="passageInput" rows="6"
         placeholder="例：阿喀琉斯的愤怒是我的主题……（从纸质书粘贴一段，建议 50–400 字）"></textarea>
       <div class="btn-row">
-        <button id="btnAnalyze" class="btn primary">▶ 开始精读</button>
+        <button id="btnAnalyze" class="btn primary">开始精读</button>
         <button id="btnClear" class="btn">清空</button>
       </div>
     </div>
@@ -76,8 +77,8 @@
         <button id="ratePlus" class="btn small">+</button>
       </span>
       <span class="ctl-group">
-        <button id="btnReadAll" class="btn primary">🔊 朗读全部</button>
-        <button id="btnStop" class="btn danger">⏹ 停止</button>
+        <button id="btnReadAll" class="btn primary">朗读全部</button>
+        <button id="btnStop" class="btn danger">停止</button>
       </span>
     </div>
 
@@ -102,7 +103,7 @@
       <div class="goal-row">
         <input id="goalInput" type="number" min="1" max="300" value="10">
         <button id="btnGoal" class="btn">保存目标</button>
-        <button id="btnCheckIn" class="btn primary">✅ 今天读了，打卡</button>
+        <button id="btnCheckIn" class="btn primary">今天打卡</button>
       </div>
       <p id="goalStatus" class="goal-status"></p>
     </div>
@@ -117,9 +118,9 @@
     <div class="card">
       <h3>主题</h3>
       <div class="theme-row">
-        <button class="btn theme-btn" data-theme="light">☀️ 浅色</button>
-        <button class="btn theme-btn" data-theme="sepia">📜 护眼</button>
-        <button class="btn theme-btn" data-theme="dark">🌙 夜间</button>
+        <button class="btn theme-btn" data-theme="light">浅色</button>
+        <button class="btn theme-btn" data-theme="sepia">护眼</button>
+        <button class="btn theme-btn" data-theme="dark">夜间</button>
       </div>
     </div>
     <div class="card">
@@ -132,7 +133,7 @@
     </div>
     <div class="card">
       <h3>数据管理</h3>
-      <button id="btnResetData" class="btn danger">🗑 清空全部本地数据（进度/设置）</button>
+      <button id="btnResetData" class="btn danger">清空全部本地数据</button>
     </div>
   </section>
 </main>
