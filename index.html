@@ -55,6 +55,21 @@
       </div>
     </div>
 
+    <div class="card reader-card">
+      <h2>原文阅读</h2>
+      <p class="hint">没有纸质书也能读：《伊利亚特》《奥德赛》全文已内置（公版英文散文译本，Lang/Leaf/Myers 与 Samuel Butler）。也可导入你自己的 .txt 文本。</p>
+      <div class="orig-row">
+        <select id="origPart" aria-label="选择分部"></select>
+        <select id="origBook" aria-label="选择卷"></select>
+        <button id="btnLoadOrig" class="btn primary">加载原文</button>
+      </div>
+      <div class="orig-import">
+        <label class="btn small" for="txtFile">导入 .txt 文件</label>
+        <input type="file" id="txtFile" accept=".txt,text/plain" hidden>
+        <span class="hint">导入你自己的中文电子书文本（仅本地读取，不上传）</span>
+      </div>
+    </div>
+
     <div class="reader-controls" id="readerControls" hidden>
       <span class="ctl-group">
         <label>字号</label>
@@ -143,6 +158,8 @@
 </footer>
 
 <script src="js/data.js"></script>
+<script src="js/texts/iliad.js"></script>
+<script src="js/texts/odyssey.js"></script>
 <script src="js/library.js"></script>
 <script src="js/app.js"></script>
 </body>
