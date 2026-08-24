@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>无障碍阅读伴侣</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body class="theme-light">
+
+<header class="app-header">
+  <div class="brand">
+    <h1>📚 无障碍阅读伴侣</h1>
+    <p class="subtitle">读得懂 · 读得进 · 读得下去</p>
+  </div>
+  <div class="streak-badge" id="streakBadge" title="连续阅读天数">🔥 0 天</div>
+</header>
+
+<nav class="tabs">
+  <button class="tab-btn active" data-tab="guide">📖 导读</button>
+  <button class="tab-btn" data-tab="reader">🔍 精读台</button>
+  <button class="tab-btn" data-tab="glossary">📚 词典</button>
+  <button class="tab-btn" data-tab="progress">🏆 进度</button>
+  <button class="tab-btn" data-tab="settings">⚙️ 设置</button>
+</nav>
+
+<main>
+  <!-- ============ 导读 ============ -->
+  <section id="tab-guide" class="tab-panel active">
+    <div class="guide-layout">
+      <aside class="guide-side">
+        <label class="field-label" for="bookSelect">选择书目</label>
+        <select id="bookSelect"></select>
+        <label class="field-label" for="partSelect">选择分部</label>
+        <select id="partSelect"></select>
+        <div id="bookList" class="book-list"></div>
+      </aside>
+      <div class="guide-main">
+        <div id="bookDetail" class="book-detail"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 精读台 ============ -->
+  <section id="tab-reader" class="tab-panel">
+    <div class="reader-card">
+      <h2>精读工作台</h2>
+      <p class="hint">把纸质书上想精读的一段文字粘贴到下面，点「开始精读」：会自动断句、标注人名术语、生成要点；点「朗读全部」可逐句跟读。</p>
+      <textarea id="passageInput" rows="6"
+        placeholder="例：阿喀琉斯的愤怒是我的主题……（从纸质书粘贴一段，建议 50–400 字）"></textarea>
+      <div class="btn-row">
+        <button id="btnAnalyze" class="btn primary">▶ 开始精读</button>
+        <button id="btnClear" class="btn">清空</button>
+      </div>
+    </div>
+
+    <div class="reader-controls" id="readerControls" hidden>
+      <span class="ctl-group">
+        <label>字号</label>
+        <button id="fontMinus" class="btn small">A−</button>
+        <button id="fontPlus" class="btn small">A+</button>
+      </span>
+      <span class="ctl-group">
+        <label>行距</label>
+        <button id="lhMinus" class="btn small">−</button>
+        <button id="lhPlus" class="btn small">+</button>
+      </span>
+      <span class="ctl-group">
+        <label>字距</label>
+        <button id="lsMinus" class="btn small">−</button>
+        <button id="lsPlus" class="btn small">+</button>
+      </span>
+      <span class="ctl-group">
+        <label>语速</label>
+        <button id="rateMinus" class="btn small">−</button>
+        <button id="ratePlus" class="btn small">+</button>
+      </span>
+      <span class="ctl-group">
+        <button id="btnReadAll" class="btn primary">🔊 朗读全部</button>
+        <button id="btnStop" class="btn danger">⏹ 停止</button>
+      </span>
+    </div>
+
+    <div id="passageView" class="passage-view"></div>
+    <div id="pointsBox" class="points-box" hidden></div>
+  </section>
+
+  <!-- ============ 词典 ============ -->
+  <section id="tab-glossary" class="tab-panel">
+    <h2>词典（人物 / 地名 / 概念）</h2>
+    <p class="hint">点词条右侧的「＋」收集到生词本；在精读台点击高亮的术语也会自动加入。收集好后可导出为 Anki 复习卡片。</p>
+    <div id="vocabBox" class="card"></div>
+    <input id="glossarySearch" type="search" placeholder="搜索：如 阿喀琉斯、雅典娜、特洛伊…">
+    <div id="glossaryGroups"></div>
+  </section>
+
+  <!-- ============ 进度 ============ -->
+  <section id="tab-progress" class="tab-panel">
+    <h2>阅读进度与习惯</h2>
+    <div class="goal-box card">
+      <label class="field-label" for="goalInput">每日小目标（分钟）</label>
+      <div class="goal-row">
+        <input id="goalInput" type="number" min="1" max="300" value="10">
+        <button id="btnGoal" class="btn">保存目标</button>
+        <button id="btnCheckIn" class="btn primary">✅ 今天读了，打卡</button>
+      </div>
+      <p id="goalStatus" class="goal-status"></p>
+    </div>
+    <div id="reviewBox" class="card"></div>
+    <div id="epicProgress" class="epic-progress"></div>
+    <div id="badges" class="badges"></div>
+  </section>
+
+  <!-- ============ 设置 ============ -->
+  <section id="tab-settings" class="tab-panel">
+    <h2>无障碍设置</h2>
+    <div class="card">
+      <h3>主题</h3>
+      <div class="theme-row">
+        <button class="btn theme-btn" data-theme="light">☀️ 浅色</button>
+        <button class="btn theme-btn" data-theme="sepia">📜 护眼</button>
+        <button class="btn theme-btn" data-theme="dark">🌙 夜间</button>
+      </div>
+    </div>
+    <div class="card">
+      <h3>专注模式</h3>
+      <p class="hint">朗读时只高亮当前句，其余内容自动变暗，减少视觉干扰。</p>
+      <label class="switch">
+        <input type="checkbox" id="focusMode">
+        <span>开启专注模式</span>
+      </label>
+    </div>
+    <div class="card">
+      <h3>数据管理</h3>
+      <button id="btnResetData" class="btn danger">🗑 清空全部本地数据（进度/设置）</button>
+    </div>
+  </section>
+</main>
+
+<footer class="app-footer">
+  本地运行 · 数据只保存在你的浏览器 · 无网络请求
+</footer>
+
+<script src="js/data.js"></script>
+<script src="js/books/demo.js"></script>
+<script src="js/library.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
