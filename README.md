@@ -37,13 +37,13 @@ python -m http.server 8765 --directory .
 └── js/
     ├── data.js         荷马史诗内容（48 卷导读卡、词典）
     ├── library.js      书库注册表
-    ├── books/          每本书一个数据文件（demo.js 为示例）
+    ├── books/          每本书一个数据文件（TEMPLATE.js 为模板）
     └── app.js          应用逻辑
 ```
 
 ## ➕ 如何添加一本新书
 
-1. 复制 `js/books/demo.js` 为 `js/books/你的书.js`
+1. 复制 `js/books/TEMPLATE.js` 为 `js/books/你的书.js`
 2. 按文件头注释的结构填写章节（导读/人物/地名/概念/精读建议/小结/自测题）、词典、主题
 3. 在 `index.html` 的 `<script>` 中加载该文件
 4. 在 `js/library.js` 的 `LIBRARY` 数组里加一项
