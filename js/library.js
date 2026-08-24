@@ -33,8 +33,3 @@ const LIBRARY = [
     themes: HOMER.themes
   }
 ];
-
-// 演示书（js/books/demo.js，可删除）
-if (typeof window !== "undefined" && window.BOOK_DEMO) {
-  LIBRARY.push(window.BOOK_DEMO);
-}
